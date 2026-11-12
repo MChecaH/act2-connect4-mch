@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"edu.epsevg.prop.lab.c4","l":"Coordenada"},{"p":"edu.epsevg.prop.lab.c4.jugador","l":"IAuto"},{"p":"edu.epsevg.prop.lab.c4.jugador","l":"Jugador"},{"p":"edu.epsevg.prop.lab.c4.jugador","l":"ProfePlayer"},{"p":"edu.epsevg.prop.lab.c4","l":"Tauler"}];updateSearchResults();
