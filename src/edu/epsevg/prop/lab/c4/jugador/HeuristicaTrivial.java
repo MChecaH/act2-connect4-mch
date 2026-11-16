@@ -9,11 +9,26 @@ import edu.epsevg.prop.lab.c4.Tauler;
  * del que sembla.</p>
  */
 public class HeuristicaTrivial implements Heuristica {
+    
+    /** Valor que fem servir com a "infinit". Molt més gran que qualsevol heurística. */
+    public static final int INFINIT = 1_000_000_000;
 
     @Override
     public int avalua(Tauler t, int colorJo) {
-        // TODO pas 4 (README 2.1)
-        return 0;
+        
+        // Cas 1: joc no acabat
+        if (!t.isGameOver()) return 0;
+        
+        // Cas 2: joc acabat, determinar guanyador
+        else
+        {
+            int guanyador = t.getGuanyador();
+        
+            if (guanyador == colorJo) guanyador = INFINIT;
+            else if (guanyador == -colorJo) guanyador = -INFINIT;
+
+            return guanyador;
+        }
     }
 
     @Override

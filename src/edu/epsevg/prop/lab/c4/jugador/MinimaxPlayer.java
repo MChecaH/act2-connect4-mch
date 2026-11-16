@@ -72,16 +72,38 @@ public class MinimaxPlayer implements Jugador, IAuto {
      */
     private int arrelMinimax(Tauler t, int prof) {
         // TODO pas 3 (README 2.1): ARREL.
-        // Codi provisional perquè la UI funcioni mentre programes (esborra'l):
+        // prepara on guardaràs el millor valor i la millor columna
+        int valor = -INFINIT;
+        int columna = -1;
+        
         for (int c = 0; c < t.getMida(); c++) {
-            if (t.movpossible(c)) {
-                return c;
+            if (!t.movpossible(c)) continue;
+            else if (columna == -1) columna = c; // guardem la primera columna lliure per defecte si segueix a -1
+            Tauler fill = new Tauler(t);    // crea còpia taulell
+            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            
+            // avalua el fill (ara li toca al rival) 
+            int valorFill = min(fill, prof-1);
+            if (valorFill > valor)                             
+            {
+                // si és millor que el que tenies, recorda el valor i la columna
+                valor = valorFill;
+                columna = c;
             }
         }
-        return 0;
+        // retorna la millor columna
+        return columna;
     }
 
     // TODO pas 1 (README 2.1): escriu aquí un mètode privat valorTerminal(Tauler t).
+    private int valorTerminal(Tauler t) {
+        int guanyador = t.getGuanyador();
+        
+        if (guanyador == colorJo) guanyador = INFINIT;
+        else if (guanyador == colorRival) guanyador = -INFINIT;
+        
+        return guanyador;
+    }
 
     /**
      * Node MAX: em toca moure a mi ({@code colorJo}).
@@ -93,8 +115,23 @@ public class MinimaxPlayer implements Jugador, IAuto {
     private int max(Tauler t, int prof) {
         nodesExplorats++;
 
-        // TODO pas 2 (README 2.1): MAX.
-        return 0;
+        if (t.isGameOver()) return valorTerminal(t); // si la partida s'ha acabat retorna el valor terminal
+        if (prof == 0) return heuristica.avalua(t, colorJo); // si no queda profunditat retorna l'heurística
+        
+        int valor = -INFINIT;
+        
+        for (int c = 0; c < t.getMida(); c++) {
+            if (!t.movpossible(c)) continue;
+            Tauler fill = new Tauler(t);    // crea còpia taulell
+            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            
+            // avalua el fill (ara li toca al rival) 
+            int valorFill = min(fill, prof-1);
+            if (valorFill > valor)
+                valor = valorFill; // si és millor que el que tenies, recorda el valor i la columna
+        }
+        
+        return valor;
     }
 
     /**
@@ -107,8 +144,23 @@ public class MinimaxPlayer implements Jugador, IAuto {
     private int min(Tauler t, int prof) {
         nodesExplorats++;
 
-        // TODO pas 2 (README 2.1): MIN, el mirall de MAX.
-        return 0;
+        if (t.isGameOver()) return valorTerminal(t); // si la partida s'ha acabat retorna el valor terminal
+        if (prof == 0) return heuristica.avalua(t, colorRival); // si no queda profunditat retorna l'heurística
+        
+        int valor = INFINIT;
+        
+        for (int c = 0; c < t.getMida(); c++) {
+            if (!t.movpossible(c)) continue;
+            Tauler fill = new Tauler(t);    // crea còpia taulell
+            fill.afegeix(c, colorRival);    // tira la fitxa del rival al fill
+            
+            // avalua el fill (ara li toca al jugador) 
+            int valorFill = max(fill, prof-1);
+            if (valorFill < valor)
+                valor = valorFill; // si és millor que el que tenies, recorda el valor i la columna
+        }
+        
+        return valor;
     }
 
     // ------------------------------------------------------------------------
