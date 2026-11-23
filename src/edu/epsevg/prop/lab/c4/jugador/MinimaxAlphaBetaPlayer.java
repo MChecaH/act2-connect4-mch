@@ -93,10 +93,10 @@ public class MinimaxAlphaBetaPlayer implements Jugador, IAuto {
         int columna = -1;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c)) continue;
-            else if (columna == -1) columna = c; // guardem la primera columna lliure per defecte si segueix a -1
+            if (!t.movpossible(ORDRE_CENTRE[c])) continue;
+            else if (columna == -1) columna = ORDRE_CENTRE[c]; // guardem la primera columna lliure per defecte si segueix a -1
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorJo);       // tira la meva fitxa al fill
             
             // avalua el fill (ara li toca al rival) 
             int valorFill = min(fill, prof-1, alfa, beta);
@@ -104,7 +104,7 @@ public class MinimaxAlphaBetaPlayer implements Jugador, IAuto {
             {
                 // si és millor que el que tenies, recorda el valor i la columna
                 alfa = valorFill;
-                columna = c;
+                columna = ORDRE_CENTRE[c];
             }
         }
         // retorna la millor columna
@@ -139,9 +139,9 @@ public class MinimaxAlphaBetaPlayer implements Jugador, IAuto {
         int valor = alfa;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c) || alfa >= beta) continue;
+            if (!t.movpossible(ORDRE_CENTRE[c]) || alfa >= beta) continue;
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorJo);       // tira la meva fitxa al fill
             
             // avalua el fill (ara li toca al rival) 
             int valorFill = min(fill, prof-1, alfa, beta);
@@ -172,9 +172,9 @@ public class MinimaxAlphaBetaPlayer implements Jugador, IAuto {
         int valor = beta;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c) || alfa >= beta) continue;
+            if (!t.movpossible(ORDRE_CENTRE[c]) || alfa >= beta) continue;
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorRival);    // tira la fitxa del rival al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorRival);    // tira la fitxa del rival al fill
             
             // avalua el fill (ara li toca al jugador) 
             int valorFill = max(fill, prof-1, alfa, beta);

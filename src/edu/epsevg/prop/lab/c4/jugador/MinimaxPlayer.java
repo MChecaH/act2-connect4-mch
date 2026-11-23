@@ -22,6 +22,11 @@ public class MinimaxPlayer implements Jugador, IAuto {
     private int colorJo;
     /** Color del rival: sempre {@code -colorJo}. */
     private int colorRival;
+    
+    /** Ordre "natural" 0..7: el mateix que el MinimaxPlayer. */
+    public static final int[] ORDRE_NATURAL = {0, 1, 2, 3, 4, 5, 6, 7};
+    /** Del centre cap enfora. */
+    public static final int[] ORDRE_CENTRE = {3, 4, 2, 5, 1, 6, 0, 7};
 
     // --- Estadístiques per a l'experimentació (Sessió 2). Ja estan fetes. ---
     private long nodesExplorats;
@@ -77,10 +82,10 @@ public class MinimaxPlayer implements Jugador, IAuto {
         int columna = -1;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c)) continue;
-            else if (columna == -1) columna = c; // guardem la primera columna lliure per defecte si segueix a -1
+            if (!t.movpossible(ORDRE_CENTRE[c])) continue;
+            else if (columna == -1) columna = ORDRE_CENTRE[c]; // guardem la primera columna lliure per defecte si segueix a -1
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorJo);       // tira la meva fitxa al fill
             
             // avalua el fill (ara li toca al rival) 
             int valorFill = min(fill, prof-1);
@@ -88,7 +93,7 @@ public class MinimaxPlayer implements Jugador, IAuto {
             {
                 // si és millor que el que tenies, recorda el valor i la columna
                 valor = valorFill;
-                columna = c;
+                columna = ORDRE_CENTRE[c];
             }
         }
         // retorna la millor columna
@@ -121,9 +126,9 @@ public class MinimaxPlayer implements Jugador, IAuto {
         int valor = -INFINIT;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c)) continue;
+            if (!t.movpossible(ORDRE_CENTRE[c])) continue;
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorJo);       // tira la meva fitxa al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorJo);       // tira la meva fitxa al fill
             
             // avalua el fill (ara li toca al rival) 
             int valorFill = min(fill, prof-1);
@@ -150,9 +155,9 @@ public class MinimaxPlayer implements Jugador, IAuto {
         int valor = INFINIT;
         
         for (int c = 0; c < t.getMida(); c++) {
-            if (!t.movpossible(c)) continue;
+            if (!t.movpossible(ORDRE_CENTRE[c])) continue;
             Tauler fill = new Tauler(t);    // crea còpia taulell
-            fill.afegeix(c, colorRival);    // tira la fitxa del rival al fill
+            fill.afegeix(ORDRE_CENTRE[c], colorRival);    // tira la fitxa del rival al fill
             
             // avalua el fill (ara li toca al jugador) 
             int valorFill = max(fill, prof-1);
